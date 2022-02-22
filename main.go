@@ -7,6 +7,7 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
+	"fmt"
 	"math/big"
 	"os"
 	"time"
@@ -61,20 +62,18 @@ func main() {
 		BasicConstraintsValid: true,
 	}
 
-
 	derBytes, err := x509.CreateCertificate(rand.Reader, &template, &template, publicKey(priv), priv)
 
 	if err != nil {
 		panic(err)
 	}
 
-
 	blockCert := &pem.Block{
 		Type: "CERTIFICATE",
 		Bytes: derBytes,
 	}
 
-	fileCert, err := os.Create("cert.pem")
+  fileCert, err := os.Create("./certs/cert.pem")
 
 	if err != nil {
 		panic(err)
@@ -84,13 +83,19 @@ func main() {
 		panic(err)
 	}
 
-	privCert, err := os.Create("priv.pem")
+	fmt.Println("Writing cert to certs/cert.pem")
+
+  privCert, err := os.Create("certs/priv.pem")
 
 	if err != nil {
 		panic(err)
 	}
 
 	if err := pem.Encode(privCert, pemBlockForKey(priv)); err != nil {
-		panic(err)
+	  panic(err)
 	}
+
+	fmt.Println("Writing cert to certs/priv.pem")
+
+	Serv()
 }
