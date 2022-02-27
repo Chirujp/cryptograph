@@ -50,11 +50,17 @@ func main() {
 		Subject: pkix.Name{
 			CommonName: "localhost",
 			Organization: []string{"Chiru Acme"},
+			Country: []string{"FR"},
+			Province: []string{""},
+			Locality: []string{"Bordeaux"},
+			StreetAddress: []string{""},
+			PostalCode: []string{"33400"},
 		},
 		Version: 3,
-		SerialNumber: big.NewInt(1),
+		SerialNumber: big.NewInt(2019),
 		NotBefore: time.Now(),
 		NotAfter: time.Now().Add(time.Hour * 24 * 365),
+		IsCA: true,
 		KeyUsage: x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature,
 		ExtKeyUsage: []x509.ExtKeyUsage{
 			x509.ExtKeyUsageServerAuth,
@@ -96,6 +102,8 @@ func main() {
 	}
 
 	fmt.Println("Writing cert to certs/priv.pem")
+
+	GetServers()
 
 	Serv()
 }
